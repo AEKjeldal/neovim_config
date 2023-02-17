@@ -12,9 +12,7 @@ vim.keymap.set('v', '<leader>y', "\"+y")
 vim.keymap.set('n', '<leader>Y', "\"+Y")
 vim.keymap.set('n', '<C-s>', ":w<cr>")
 
-
-
-
-
--- Insert mode keymaps
-vim.keymap.set('i','<esc>', '')
+-- experimental
+vim.keymap.set('n','<leader>t',function()
+	require('script_runner').term_buffer()
+end)
