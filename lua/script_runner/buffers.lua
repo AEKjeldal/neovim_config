@@ -4,11 +4,19 @@ local M = {}
 -- type: bufno
 M.active_buffers = {}
 
+M.active_windows = {}
 
-M.hide_buffer = function(winno)
+
+M.hide_buffer = function(wintype,bufname)
+
+	local winno = M.active_windows[wintype]
+	-- check window is active
 	if winno then
 		vim.api.nvim_win_hide(winno)
+		-- window is removed, remove from list
+		M.active_windows[wintype]=nil
 	end
+
 end
 
 
@@ -20,33 +28,42 @@ M.term_buffer = function(title)
 		bufno = M.active_buffers[title]
 		vim.api.nvim_buf_call(bufno,vim.cmd.term)
 	end
-	-- vim.keymap.set('t','<Esc>','<C-\\><C-n>',{ buffer = bufno })
-
-
-	print("settign up term_buffer for buffer:" .. bufno)
 	vim.api.nvim_buf_call(bufno,function ()
+		-- This setting did not work with the lua api
 		vim.cmd('tnoremap <buffer> <Esc> <C-\\><C-n>')
 	end)
 	vim.api.nvim_buf_call(bufno,vim.cmd.startinsert)
 
 end
 
-M.activate_buffer = function(title)
-	local bufno = M.active_buffers[title]
 
-	local winno = vim.api.nvim_open_win(bufno,true,M.winopts)
+M.activate_buffer = function(title,winopts,wintype)
+	winopts =  winopts or M.winopts
+	wintype = wintype or 'main'
+
+	local bufno = M.active_buffers[title]
+	local winno = M.active_windows[wintype] 
+
+	if not winno then
+		print('creating: '.. wintype)
+		winno = vim.api.nvim_open_win(bufno,true,winopts)
+		M.active_windows[wintype] = winno
+	else
+		print('updating: '.. wintype)
+		vim.api.nvim_win_set_buf(winno,bufno)
+	end
 
 	vim.api.nvim_create_autocmd("BufLeave", {
 		callback = function()
-			M.hide_buffer(winno)
+			M.hide_buffer(wintype,title)
 		end,
-		group = vim.api.nvim_create_augroup("runner_group", {clear = true}),
+		group = vim.api.nvim_create_augroup("script_runner_"..wintype, {clear = true}),
 		buffer = bufno
 	})
 
 	-- vim.keymap.set('n', '<esc>',M.hide_buffer,{ silent = true, buffer = bufno })
 	vim.keymap.set('n', '<esc>', function()
-		M.hide_buffer(winno)
+		M.hide_buffer(wintype,title)
 	end,
 	{ silent = true, buffer = bufno })
 end

@@ -13,6 +13,18 @@ vim.keymap.set('n', '<leader>Y', "\"+Y")
 vim.keymap.set('n', '<C-s>', ":w<cr>")
 
 -- experimental
+vim.keymap.set('n','<leader>1',function()
+	require('script_runner').open_picker()
+end)
+
 vim.keymap.set('n','<leader>t',function()
+	require('script_runner').term_buffer('term')
+end)
+
+vim.keymap.set('n','<leader>T',function()
+	print("lakwjelakjwe")
 	require('script_runner').term_buffer()
 end)
+
+
+
