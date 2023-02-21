@@ -3,7 +3,6 @@ local M = {}
 
 -- type: bufno
 M.active_buffers = {}
-
 M.active_windows = {}
 
 
@@ -32,10 +31,21 @@ M.term_buffer = function(title)
 		-- This setting did not work with the lua api
 		vim.cmd('tnoremap <buffer> <Esc> <C-\\><C-n>')
 	end)
-	vim.api.nvim_buf_call(bufno,vim.cmd.startinsert)
+	-- vim.api.nvim_buf_call(bufno,vim.cmd.startinsert)
 
+
+	vim.api.nvim_create_autocmd("BufEnter", {
+		callback = function()
+			vim.cmd.startinsert()
+		end,
+		group = vim.api.nvim_create_augroup("script_runner_"..title, {clear = false}),
+		buffer = bufno
+	})
+
+
+
+	
 end
-
 
 M.activate_buffer = function(title,winopts,wintype)
 	winopts =  winopts or M.winopts
@@ -61,6 +71,10 @@ M.activate_buffer = function(title,winopts,wintype)
 		buffer = bufno
 	})
 
+	vim.keymap.set('n', 'q', function()
+		M.hide_buffer(wintype,title)
+	end,
+	{ silent = true, buffer = bufno })
 	-- vim.keymap.set('n', '<esc>',M.hide_buffer,{ silent = true, buffer = bufno })
 	vim.keymap.set('n', '<esc>', function()
 		M.hide_buffer(wintype,title)
