@@ -18,12 +18,11 @@ vim.keymap.set('n','<leader>1',function()
 end)
 
 vim.keymap.set('n','<leader>t',function()
-	require('script_runner').term_buffer('term')
+	require('script_runner').term_buffer()
 end)
 
 vim.keymap.set('n','<leader>T',function()
-	print("lakwjelakjwe")
-	require('script_runner').term_buffer()
+	require('script_runner').term_buffer(vim.fn.input('input term name: '))
 end)
 
 

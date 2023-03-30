@@ -1,8 +1,7 @@
 local buffer =  require('script_runner.buffers')
+local ui	 =  require('script_runner.ui')
 
 M = { 
-
-
 
 }
 
@@ -15,17 +14,17 @@ M.toggle_window =  function(title)
 	if not (bufno and vim.api.nvim_buf_is_valid(bufno)) then
 		buffer.setup_buffer(title)
 	end
-	M.buffer.activate_buffer(title)
+	ui.activate_buffer(title)
 end
 
 M.term_buffer = function(term_name)
-	term_name = term_name or vim.fn.input('input term name: ')
+	term_name = term_name or buffer.selected_window
 
 	-- TODO tmp fix; should chek if buffer is term
 	if not buffer.active_buffers[term_name] then
 		M.buffer.term_buffer(term_name)
 	end
-	buffer.activate_buffer(term_name)
+	ui.activate_buffer(term_name)
 end
 
 
@@ -94,12 +93,12 @@ M.open_picker = function()
 	}
 
 
-	buffer.activate_buffer('picker',winopts,wintype)
+	ui.activate_buffer('picker',winopts,wintype)
 	vim.api.nvim_create_autocmd("CursorHold", {
 		callback = function()
 			local pos = vim.api.nvim_win_get_cursor(0)[1]
 			local title = vim.api.nvim_buf_get_lines(bufno,pos-1,pos,true)[1]
-			buffer.activate_buffer(title)
+			ui.activate_buffer(title)
 			local winno = buffer.active_windows[wintype]
 			vim.api.nvim_set_current_win(winno)
 		end,
@@ -111,7 +110,7 @@ M.open_picker = function()
 	vim.keymap.set('n', '<cr>', function()
 		local pos = vim.api.nvim_win_get_cursor(0)[1]
 		local sel_title = vim.api.nvim_buf_get_lines(bufno,pos-1,pos,true)[1]
-		buffer.activate_buffer(sel_title)
+		ui.activate_buffer(sel_title)
 		buffer.hide_buffer(wintype,title)
 	end,
 	{ silent = true, buffer = bufno })
@@ -145,11 +144,66 @@ end
 
 
 
-return M
 
-
-
-
+-- local function setup_script_buffer(data)
+-- 	local bufno = vim.api.nvim_create_buf(false,false)
+-- 	vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
+-- 	return bufno
+-- end
+--
+-- local function setup_preview_buffer(script_buffer)
+-- 	local bufno = vim.api.nvim_create_buf(false,false)
+-- 	vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
+-- 	-- setup data
+--
+-- 	return bufno
+-- end
+--
+-- local function setup_runner(title,data)
+-- 	local script_buffer  = setup_script_buffer(data)
+-- 	local preview_buffer = setup_preview_buffer()
+-- end
+--
+--
+--
+-- local function setup_job(script_buf,bufno)
+-- 	local runner = vim.api.nvim_buf_get_lines(script_buf,0,-1,false)
+--
+-- 	script = runner.script
+-- 	opts = runner.opts
+-- 	-- This Should Run On save of buffer
+-- 	opts.on_stdout = function (_,data)
+-- 		if data then
+-- 			vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
+-- 		end
+-- 	end
+-- 	opts.on_stdout = function (_,data)
+-- 		if data then
+-- 			vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
+-- 		end
+-- 	end
+--
+-- 	vim.fn.jobstart(script,opts)
+-- end
+--
+--
+-- 		vim.fn.jobstart(script,{
+-- 			-- stdout_buffered=true,
+-- 			on_stdout = function(_,data)
+-- 				if data then
+-- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
+-- 				end
+-- 			end,
+--
+-- 			on_stderr = function (_,data)
+-- 				if not table.empty(data) then
+-- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,{'error:'})
+-- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
+-- 				end
+-- 			end
+-- 		}
+-- 		)
+--end
 
 
 -- local function setup_buffer()
@@ -213,3 +267,4 @@ return M
 -- vim.api.nvim_buf_set_lines(bufno,-1,-1,false,{'hej','hejsan','swaje'})
 -- open_new_window()
 
+return M
