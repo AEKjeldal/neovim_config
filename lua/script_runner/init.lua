@@ -1,10 +1,7 @@
 local buffer =  require('script_runner.buffers')
 local ui	 =  require('script_runner.ui')
 
-M = { 
-
-}
-
+M = {}
 
 M.buffer = buffer
 

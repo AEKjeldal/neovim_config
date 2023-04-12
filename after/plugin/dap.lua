@@ -10,9 +10,19 @@ vim.keymap.set('n','<leader>di', dap.step_into)
 vim.keymap.set('n','<leader>du', dap.step_out)
 vim.keymap.set('n','<leader>db', dap.toggle_breakpoint)
 
+
+local home = os.getenv('HOME') or os.getenv('USERPROFILE')
+
+-- if os.getenv('OS') == 'Windows_NT' then
+-- 	home = os.getenv('USERPROFILE')
+-- end
+
+
 dap.adapters.python = {
 	type = 'executable',
-    command = os.getenv('HOME') .. '/.virtualenvs/debugpy/bin/python';
+
+
+    command = home .. '/.virtualenvs/debugpy/bin/python';
 	args = {'-m', 'debugpy.adapter'}
 }
 

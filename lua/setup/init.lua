@@ -12,7 +12,10 @@ vim.expandtab = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim.undodir"
+
+local home  = os.getenv("HOME") or os.getenv('USERPROFILE')
+vim.opt.undodir = home .. "/.vim.undodir"
+
 vim.opt.undofile = true 
 
 
