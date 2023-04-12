@@ -29,7 +29,42 @@ local function build_term_buffer(title)
 		buffer = bufno
 	})
 
-	return bufno
+
+end
+
+M.activate_buffer = function(title,winopts,wintype)
+	winopts =  winopts or M.winopts
+	wintype = wintype or 'main'
+
+	local bufno = M.active_buffers[title]
+	local winno = M.active_windows[wintype]
+
+	if not winno then
+		print('creating: '.. wintype)
+		winno = vim.api.nvim_open_win(bufno,true,winopts)
+		M.active_windows[wintype] = winno
+	else
+		print('updating: '.. wintype)
+		vim.api.nvim_win_set_buf(winno,bufno)
+	end
+
+	vim.api.nvim_create_autocmd("BufLeave", {
+		callback = function()
+			M.hide_buffer(wintype,title)
+		end,
+		group = vim.api.nvim_create_augroup("script_runner_"..wintype, {clear = true}),
+		buffer = bufno
+	})
+
+	vim.keymap.set('n', 'q', function()
+		M.hide_buffer(wintype,title)
+	end,
+	{ silent = true, buffer = bufno })
+	-- vim.keymap.set('n', '<esc>',M.hide_buffer,{ silent = true, buffer = bufno })
+	vim.keymap.set('n', '<esc>', function()
+		M.hide_buffer(wintype,title)
+	end,
+	{ silent = true, buffer = bufno })
 end
 
 M.setup_buffer = function(title)

@@ -6,6 +6,7 @@ M = {}
 M.buffer = buffer
 
 M.toggle_window =  function(title)
+	title = title or buffer.selected_window
 	local bufno = buffer.active_buffers[title]
 
 	if not (bufno and vim.api.nvim_buf_is_valid(bufno)) then

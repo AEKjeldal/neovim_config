@@ -25,6 +25,7 @@ return require('packer').startup(function(use)
 	use('tpope/vim-fugitive')
 	use{'Joakker/lua-json5', run = './install.sh'}
 	use('mhinz/vim-signify')
+	use({'RaafatTurki/hex.nvim' })
 	use('terrortylor/nvim-comment')
 	use {"luukvbaal/nnn.nvim"}
 

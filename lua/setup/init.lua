@@ -1,6 +1,7 @@
 require("setup.remap")
 require("setup.packer")
 
+
 vim.opt.nu = true
 vim.opt.rnu = true
 
@@ -31,3 +32,11 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
 vim.opt.wrap = false
+
+vim.diagnostic.show()
+
+if os.getenv('USERPROFILE') then
+	vim.o.shell = 'powershell.exe'
+end
+
+

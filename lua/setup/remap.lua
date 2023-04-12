@@ -22,8 +22,6 @@ vim.keymap.set('n','<leader>t',function()
 end)
 
 vim.keymap.set('n','<leader>T',function()
-	require('script_runner').term_buffer(vim.fn.input('input term name: '))
+	require('script_runner').term_buffer()
 end)
-
-
 
