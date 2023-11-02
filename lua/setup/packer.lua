@@ -19,11 +19,27 @@ return require('packer').startup(function(use)
 		end
 	})
 
+    -- use( 'preservim/vim-markdown')
+    use( 'godlygeek/tabular')
+
+	use({'jakewvincent/mkdnflow.nvim',
+	rocks = 'luautf8', -- Ensures optional luautf8 dependency is installed
+	config = function()
+		require('mkdnflow').setup()
+	end
+})
+    use( 'lewis6991/gitsigns.nvim')
+
+
+	use('epwalsh/obsidian.nvim')
+	use('ThePrimeagen/harpoon')
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
 	use{'Joakker/lua-json5', run = './install.sh'}
 	use('mhinz/vim-signify')
+	use({'RaafatTurki/hex.nvim' })
 	use('terrortylor/nvim-comment')
+	use {"luukvbaal/nnn.nvim"}
 
 
 	use('nvim-treesitter/nvim-treesitter', {run  = ':TSUpdate'})
@@ -52,14 +68,25 @@ return require('packer').startup(function(use)
 		}
 	}
 
+	use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
 	use {
-		  'nvim-lualine/lualine.nvim',
-		    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-		}
+		'nvim-lualine/lualine.nvim',
+		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+	}
 
-
-
+	-- use{'puremourning/vimspector'}
+	use {"mfussenegger/nvim-dap"}
 	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
-
+	use {'mfussenegger/nvim-dap-python'}
+	use {
+		"Dax89/automaton.nvim",
+		requires = {
+			{"nvim-lua/plenary.nvim"},
+			{"nvim-telescope/telescope.nvim"},
+			{"mfussenegger/nvim-dap"}, -- Debug support for 'launch' configurations (Optional)
+			{"hrsh7th/nvim-cmp"},      -- Autocompletion for automaton workspace files (Optional)
+			{"L3MON4D3/LuaSnip"},      -- Snippet support for automaton workspace files (Optional)
+		}
+	}
 end)
