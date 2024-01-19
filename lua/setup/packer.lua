@@ -21,6 +21,7 @@ return require('packer').startup(function(use)
 
     -- use( 'preservim/vim-markdown')
     use( 'godlygeek/tabular')
+    use( 'rcarriga/nvim-notify')
 
 	use({'jakewvincent/mkdnflow.nvim',
 	rocks = 'luautf8', -- Ensures optional luautf8 dependency is installed
@@ -76,6 +77,8 @@ return require('packer').startup(function(use)
 	}
 
 	-- use{'puremourning/vimspector'}
+	use {"tpope/vim-dadbod"}
+	use {'kristijanhusak/vim-dadbod-ui'}
 	use {"mfussenegger/nvim-dap"}
 	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
 	use {'mfussenegger/nvim-dap-python'}
