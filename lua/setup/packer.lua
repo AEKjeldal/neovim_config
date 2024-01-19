@@ -11,24 +11,35 @@ return require('packer').startup(function(use)
 		requires = { {'nvim-lua/plenary.nvim'} }
 	}
 
-	use({
-		'rose-pine/neovim',
-		as = 'rose-pine',
-		config = function()
-			vim.cmd('colorscheme rose-pine')
-		end
-	})
+    use( 'godlygeek/tabular')
+
+	use({'jakewvincent/mkdnflow.nvim',
+	rocks = 'luautf8', -- Ensures optional luautf8 dependency is installed
+	config = function()
+		require('mkdnflow').setup()
+	end
+})
+    use( 'lewis6991/gitsigns.nvim')
 
 
+	use('epwalsh/obsidian.nvim')
 	use('ThePrimeagen/harpoon')
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
-	use{'Joakker/lua-json5', run = './install.sh'}
+
+	use {
+	    'Joakker/lua-json5',
+	    -- if you're on windows
+	    run = 'powershell ./install.ps1'
+	    -- run = './install.sh'
+	}
+	use { "catppuccin/nvim", as = "catppuccin" }
+
 	use('mhinz/vim-signify')
 	use({'RaafatTurki/hex.nvim' })
 	use('terrortylor/nvim-comment')
 	use {"luukvbaal/nnn.nvim"}
-
+	use {'iamcco/markdown-preview.nvim'}
 
 	use('nvim-treesitter/nvim-treesitter', {run  = ':TSUpdate'})
 	use('nvim-treesitter/playground')
@@ -66,7 +77,7 @@ return require('packer').startup(function(use)
 	-- use{'puremourning/vimspector'}
 	use {"mfussenegger/nvim-dap"}
 	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
-	-- use 'mfussenegger/nvim-dap-python'
+	use {'mfussenegger/nvim-dap-python'}
 	use {
 		"Dax89/automaton.nvim",
 		requires = {

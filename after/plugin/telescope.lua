@@ -1,11 +1,19 @@
-
 local builin = require('telescope.builtin')
+local actions = require('telescope.actions')
 
 
 -- You dont need to set any of these options. These are the default ones. Only
 -- the loading is important
 require('telescope').setup {
-  extensions = {
+	defaults = {
+    -- Default configuration for telescope goes here:
+    -- config_key = value,
+    mappings = {
+      i = {
+		  -- ctrlq sends to qflist and opens it
+        ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist
+      }
+    },
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
       override_generic_sorter = true,  -- override the generic sorter
@@ -28,8 +36,10 @@ require('telescope').setup {
 
 
 
+vim.keymap.set('n','<C-b>',builin.git_branches,{})
 vim.keymap.set('n','<C-p>',builin.find_files,{})
 vim.keymap.set('n','<leader>f',builin.live_grep,{})
+vim.keymap.set('n','<leader>b',builin.buffers,{})
 
 vim.keymap.set('n','<C-f>',function()
 	builin.grep_string({ search = vim.fn.expand("<cword>") })
