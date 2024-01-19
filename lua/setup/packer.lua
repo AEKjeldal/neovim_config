@@ -30,7 +30,13 @@ return require('packer').startup(function(use)
 	use {
 	    'Joakker/lua-json5',
 	    -- if you're on windows
-	    run = 'powershell ./install.ps1'
+	    run = function()
+		    if os.getenv('OS') == 'Windows_NT' then
+			    return 'powershell ./install.ps1'
+		    else
+			    return './install.sh'
+		    end
+	    end
 	    -- run = './install.sh'
 	}
 	use { "catppuccin/nvim", as = "catppuccin" }
