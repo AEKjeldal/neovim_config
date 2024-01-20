@@ -1,5 +1,16 @@
 
+-- Fix this to be a function when you have the time
+local json5_install = ''
+if os.getenv('OS') == 'Windows_NT' then
+    json5_install = 'powershell ./install.ps1'
+else
+    json5_install = './install.sh'
+end
+
+
+
 -- Only required if you have packer configured as `opt`
+
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
@@ -30,14 +41,14 @@ return require('packer').startup(function(use)
 	use {
 	    'Joakker/lua-json5',
 	    -- if you're on windows
-	    run = function()
-		    if os.getenv('OS') == 'Windows_NT' then
-			    return 'powershell ./install.ps1'
-		    else
-			    return './install.sh'
-		    end
-	    end
-	    -- run = './install.sh'
+		run = json5_install
+	    -- run = function()
+	    -- 		    if os.getenv('OS') == 'Windows_NT' then
+	    -- 			    return 'powershell ./install.ps1'
+	    -- 		    else
+	    -- 			    return './install.sh'
+	    -- 		    end
+	    -- end
 	}
 	use { "catppuccin/nvim", as = "catppuccin" }
 
