@@ -121,5 +121,4 @@ M.import_workspace = function(dir)
 	end
 end
 
-M.import_workspace()
 return M
