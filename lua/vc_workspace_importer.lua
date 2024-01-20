@@ -2,22 +2,35 @@ local json5 = require('json5')
 local dap = require('dap')
 
 
+local function sep()
+	if os.getenv('OS') == 'Windows_NT' then
+		return '\\'
+	else
+		return '/'
+	end
+end
+
+
+
+
 local M = {}
 M.imported_paths = {}
 
 local function find_workspaces(dir)
   dir = dir or vim.fn['getcwd']()
+  print('looking in workspaces: '..dir)
 
   local workspaces = {}
 
   if vim.fn.isdirectory(dir) > 0 then
 	  for i,file in pairs(vim.fn.readdir(dir)) do
-		  if vim.fn.isdirectory(dir..'\\'..file) > 0 and file == 'vc_workspace' then
+		  if vim.fn.isdirectory(dir..sep()..file) > 0 and file == 'vc_workspace' then
+			  print('aklwekljawe')
 
-			  for i,workspace in pairs(vim.fn.readdir(dir..'\\'..file)) do
+			  for i,workspace in pairs(vim.fn.readdir(dir..sep()..file)) do
 				  -- if not directory then is file?
-				  if vim.fn.isdirectory(dir..'\\'..file..'\\'..workspace) == 0 then
-					  table.insert(workspaces,{filename =workspace, path = dir..'\\'..file..'\\'..workspace})
+				  if vim.fn.isdirectory(dir..sep()..file..sep()..workspace) == 0 then
+					  table.insert(workspaces,{filename =workspace, path = dir..sep()..file..sep()..workspace})
 				  end
 			  end
 		  end
@@ -101,12 +114,12 @@ M.import_workspace = function(dir)
 
 	local content = json_parse(load_file(pick['path']))
 	config_formatted = format_config(content,path_to_obj(content))
-	set_paths(path_to_obj(content))
+	-- set_paths(path_to_obj(content))
 
 	for _,conf in pairs(config_formatted.launch.configurations) do
 		table.insert(dap.configurations.python,conf)
 	end
 end
 
--- M.import_workspace()
+M.import_workspace()
 return M
