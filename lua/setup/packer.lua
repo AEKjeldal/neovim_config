@@ -1,5 +1,16 @@
 
+-- Fix this to be a function when you have the time
+local json5_install = ''
+if os.getenv('OS') == 'Windows_NT' then
+    json5_install = 'powershell ./install.ps1'
+else
+    json5_install = './install.sh'
+end
+
+
+
 -- Only required if you have packer configured as `opt`
+
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
@@ -11,13 +22,7 @@ return require('packer').startup(function(use)
 		requires = { {'nvim-lua/plenary.nvim'} }
 	}
 
-	use({
-		'rose-pine/neovim',
-		as = 'rose-pine',
-		config = function()
-			vim.cmd('colorscheme rose-pine')
-		end
-	})
+    use( 'godlygeek/tabular')
 
     -- use( 'preservim/vim-markdown')
     use( 'godlygeek/tabular')
@@ -42,6 +47,25 @@ return require('packer').startup(function(use)
 	use('terrortylor/nvim-comment')
 	use {"luukvbaal/nnn.nvim"}
 
+	use {
+	    'Joakker/lua-json5',
+	    -- if you're on windows
+		run = json5_install
+	    -- run = function()
+	    -- 		    if os.getenv('OS') == 'Windows_NT' then
+	    -- 			    return 'powershell ./install.ps1'
+	    -- 		    else
+	    -- 			    return './install.sh'
+	    -- 		    end
+	    -- end
+	}
+	use { "catppuccin/nvim", as = "catppuccin" }
+
+	use('mhinz/vim-signify')
+	use({'RaafatTurki/hex.nvim' })
+	use('terrortylor/nvim-comment')
+	use {"luukvbaal/nnn.nvim"}
+	use {'iamcco/markdown-preview.nvim'}
 
 	use('nvim-treesitter/nvim-treesitter', {run  = ':TSUpdate'})
 	use('nvim-treesitter/playground')
@@ -77,8 +101,6 @@ return require('packer').startup(function(use)
 	}
 
 	-- use{'puremourning/vimspector'}
-	use {"tpope/vim-dadbod"}
-	use {'kristijanhusak/vim-dadbod-ui'}
 	use {"mfussenegger/nvim-dap"}
 	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
 	use {'mfussenegger/nvim-dap-python'}
