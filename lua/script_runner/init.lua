@@ -3,6 +3,7 @@ local ui	 =  require('script_runner.ui')
 
 M = {}
 
+
 M.buffer = buffer
 
 M.toggle_window =  function(title)
@@ -139,130 +140,5 @@ local function setup_win()
  vim.api.nvim_win_set_option(winno,'rnu',false)
  vim.api.nvim_win_set_option(winno,'nu',false)
 end
-
-
-
-
--- local function setup_script_buffer(data)
--- 	local bufno = vim.api.nvim_create_buf(false,false)
--- 	vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
--- 	return bufno
--- end
---
--- local function setup_preview_buffer(script_buffer)
--- 	local bufno = vim.api.nvim_create_buf(false,false)
--- 	vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
--- 	-- setup data
---
--- 	return bufno
--- end
---
--- local function setup_runner(title,data)
--- 	local script_buffer  = setup_script_buffer(data)
--- 	local preview_buffer = setup_preview_buffer()
--- end
---
---
---
--- local function setup_job(script_buf,bufno)
--- 	local runner = vim.api.nvim_buf_get_lines(script_buf,0,-1,false)
---
--- 	script = runner.script
--- 	opts = runner.opts
--- 	-- This Should Run On save of buffer
--- 	opts.on_stdout = function (_,data)
--- 		if data then
--- 			vim.api.nvim_buf_set_lines(bufno,0,-1,false,data)
--- 		end
--- 	end
--- 	opts.on_stdout = function (_,data)
--- 		if data then
--- 			vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
--- 		end
--- 	end
---
--- 	vim.fn.jobstart(script,opts)
--- end
---
---
--- 		vim.fn.jobstart(script,{
--- 			-- stdout_buffered=true,
--- 			on_stdout = function(_,data)
--- 				if data then
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
--- 				end
--- 			end,
---
--- 			on_stderr = function (_,data)
--- 				if not table.empty(data) then
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,{'error:'})
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
--- 				end
--- 			end
--- 		}
--- 		)
---end
-
-
--- local function setup_buffer()
--- 	bufno = vim.api.nvim_create_buf(false,false)
--- 	print('Setting up buffer: '..bufno)
--- 	vim.api.nvim_buf_set_option(bufno,'buftype','nofile')
--- 	vim.api.nvim_buf_call(bufno,vim.cmd.terminal)
--- 	vim.api.nvim_create_autocmd("BufLeave", {
--- 		callback = function()
--- 		if winno then
--- 			vim.api.nvim_win_hide(winno)
--- 		end
--- 		end,
--- 		group = vim.api.nvim_create_augroup("runner_group", {clear = true}),
--- 		buffer = bufno
--- 	})
---
---     vim.keymap.set('n', '<cr>',function()
--- 		local buf = vim.api.nvim_get_current_buf()
--- 		local sel = vim.api.nvim_get_current_line()
--- 		local script = vim.g.runners[sel]
---
--- 		vim.fn.jobstart(script,{
--- 			-- stdout_buffered=true,
--- 			on_stdout = function(_,data)
--- 				if data then
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
--- 				end
--- 			end,
---
--- 			on_stderr = function (_,data)
--- 				if not table.empty(data) then
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,{'error:'})
--- 					vim.api.nvim_buf_set_lines(bufno,-1,-1,false,data)
--- 				end
--- 			end
--- 		}
--- 		)
--- 	end,
--- 	{ silent = true, buffer = bufno })
---
---     vim.keymap.set('n', '<esc>', function()
--- 		-- vim.api.nvim_buf_delete(bufno,{})
--- 		if winno then
--- 			vim.api.nvim_win_hide(winno)
--- 		end
---
--- 	end,
--- 	{ silent = true, buffer = bufno })
--- end
---
---
---
---
---
--- this will set buffer text = hej, hejsan, swaje erasing all other
---vim.api.nvim_buf_set_lines(bufno,0,-1,false,{'hej','hejsan','swaje'})
--- this will append buffer text to the start
--- vim.api.nvim_buf_set_lines(bufno,0,0,false,{'hej','hejsan','swaje'})
--- this will append buffer text to the end
--- vim.api.nvim_buf_set_lines(bufno,-1,-1,false,{'hej','hejsan','swaje'})
--- open_new_window()
 
 return M

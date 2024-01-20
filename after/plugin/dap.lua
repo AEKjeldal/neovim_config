@@ -37,10 +37,6 @@ local function debugpy_install_package()
 		print()
 		print('Installing package: '..input)
 		vim.fn.jobstart(venv..' -m pip install '..input)
-
-
-
-
 	end)
 end
 

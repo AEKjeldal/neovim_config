@@ -24,6 +24,10 @@ return require('packer').startup(function(use)
 
     use( 'godlygeek/tabular')
 
+    -- use( 'preservim/vim-markdown')
+    use( 'godlygeek/tabular')
+    use( 'rcarriga/nvim-notify')
+
 	use({'jakewvincent/mkdnflow.nvim',
 	rocks = 'luautf8', -- Ensures optional luautf8 dependency is installed
 	config = function()
@@ -37,6 +41,11 @@ return require('packer').startup(function(use)
 	use('ThePrimeagen/harpoon')
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
+	use{'Joakker/lua-json5', run = './install.sh'}
+	use('mhinz/vim-signify')
+	use({'RaafatTurki/hex.nvim' })
+	use('terrortylor/nvim-comment')
+	use {"luukvbaal/nnn.nvim"}
 
 	use {
 	    'Joakker/lua-json5',

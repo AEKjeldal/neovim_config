@@ -45,7 +45,3 @@ vim.keymap.set('n','<C-f>',function()
 	builin.grep_string({ search = vim.fn.expand("<cword>") })
 end)
 
--- vim.keymap.set('n','<leader>f',function()
--- 	builin.grep_string({ search = vim.fn.input("Grep: ") })
--- end)
-

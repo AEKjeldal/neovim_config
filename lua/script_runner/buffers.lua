@@ -30,8 +30,6 @@ local function build_term_buffer(title)
 	})
 
 
-end
-
 M.activate_buffer = function(title,winopts,wintype)
 	winopts =  winopts or M.winopts
 	wintype = wintype or 'main'
