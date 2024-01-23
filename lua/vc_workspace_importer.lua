@@ -16,26 +16,30 @@ end
 local M = {}
 M.imported_paths = {}
 
+local function find_woakspaceFiles(dir)
+	return vim.split(vim.fn.glob(dir .. "/**/*.code-workspace"), '\n', {trimempty=true})
+end
 local function find_workspaces(dir)
+
   dir = dir or vim.fn['getcwd']()
-  print('looking in workspaces: '..dir)
 
-  local workspaces = {}
-
-  if vim.fn.isdirectory(dir) > 0 then
-	  for i,file in pairs(vim.fn.readdir(dir)) do
-		  if vim.fn.isdirectory(dir..sep()..file) > 0 and file == 'vc_workspace' then
-			  print('aklwekljawe')
-
-			  for i,workspace in pairs(vim.fn.readdir(dir..sep()..file)) do
-				  -- if not directory then is file?
-				  if vim.fn.isdirectory(dir..sep()..file..sep()..workspace) == 0 then
-					  table.insert(workspaces,{filename =workspace, path = dir..sep()..file..sep()..workspace})
-				  end
-			  end
-		  end
-	  end
-  end
+  local workspaces= find_woakspaceFiles(dir)
+  -- local workspaces = {}
+  --
+  -- if vim.fn.isdirectory(dir) > 0 then
+  -- 	  for i,file in pairs(vim.fn.readdir(dir)) do
+  -- 		  if vim.fn.isdirectory(dir..sep()..file) > 0 and file == 'vc_workspace' then
+  -- 			  print('aklwekljawe')
+  --
+  -- 			  for i,workspace in pairs(vim.fn.readdir(dir..sep()..file)) do
+  -- 				  -- if not directory then is file?
+  -- 				  if vim.fn.isdirectory(dir..sep()..file..sep()..workspace) == 0 then
+  -- 					  table.insert(workspaces,{filename =workspace, path = dir..sep()..file..sep()..workspace})
+  -- 				  end
+  -- 			  end
+  -- 		  end
+  -- 	  end
+  -- end
 
   return workspaces
 end
@@ -98,11 +102,12 @@ end
 
 M.import_workspace = function(dir)
 	local workspaces = find_workspaces(dir)
+	print(vim.inspect(workspaces))
 
 	vim.ui.select(workspaces, {
 		prompt = 'Select file:',
 		format_item = function(item)
-			return  vim.inspect(item.filename)
+			return  vim.inspect(item)
 		end,
 	}, function(choice)
 		pick = choice
@@ -120,5 +125,5 @@ M.import_workspace = function(dir)
 		table.insert(dap.configurations.python,conf)
 	end
 end
-
+M.import_workspace()
 return M
