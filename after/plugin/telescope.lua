@@ -35,9 +35,18 @@ require('telescope').setup {
 
 
 
+vim.keymap.set('n','<C-p>',builin.find_files,{})
+vim.keymap.set('n','<C-p>',function()
+
+	local files = require('vc_workspace_importer').imported_paths
+
+	print(vim.inspect(files))
+
+	builin.find_files({search_dirs=files})
+
+end)
 
 vim.keymap.set('n','<C-b>',builin.git_branches,{})
-vim.keymap.set('n','<C-p>',builin.find_files,{})
 vim.keymap.set('n','<leader>f',builin.live_grep,{})
 vim.keymap.set('n','<leader>b',builin.buffers,{})
 
