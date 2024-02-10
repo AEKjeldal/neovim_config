@@ -38,7 +38,7 @@ require('telescope').setup {
 vim.keymap.set('n','<C-p>',builin.find_files,{})
 vim.keymap.set('n','<C-p>',function()
 
-	local files = require('vc_workspace_importer').imported_paths
+	local files = require('workspace_importer').constants.imported_paths
 
 	print(vim.inspect(files))
 

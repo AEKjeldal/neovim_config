@@ -129,7 +129,7 @@ M.import_workspace = function(dir)
 	go_to_workspace(pick['path'])
 	local content = json_parse(load_file(pick['path']))
 
-	config_formatted = format_config(content,path_to_obj(content))
+	local config_formatted = format_config(content,path_to_obj(content))
 	set_paths(path_to_obj(content))
 
 	for _,conf in pairs(config_formatted.launch.configurations) do
