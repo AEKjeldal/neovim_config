@@ -1,41 +1,15 @@
-constants        = require('workspace_importer.constants')
-builtin_runners  = require('workspace_importer.builtin_runners')
-
-
+local constants        = require('workspace_importer.constants')
+local builtin_runners  = require('workspace_importer.builtin_runners')
+local ui               = require('workspace_importer.ui')
 
 
 M = {}
-M.output_buffer = nil
+M.output_buffer   = nil
 M.trigger_on_save = nil
-M.term_window = nil
 
-
-local term_window_visible=function()
-	if not (type(M.term_window) == 'number') then
-		return false
-	end
-	return vim.api.nvim_win_is_valid(M.term_window)
-end
-
-local open_term_window = function(output_buffer,height)
-	if not term_window_visible() then
-		local curr_win = vim.api.nvim_get_current_win()
-		height = height or 10 -- set a default
-		vim.cmd("bel "..height.."split")
-		M.term_window = vim.api.nvim_get_current_win() -- we are now in termwindow
-		vim.api.nvim_set_current_win(curr_win)
-	end
-
-	-- TODO consider only running if output buffer is given=
-	vim.api.nvim_win_set_buf(M.term_window,output_buffer)
-end
 
 M.toggle_term_window = function()
-	if not term_window_visible() then
-		open_term_window(M.output_buffer)
-		return
-	end
-	vim.api.nvim_win_close(M.term_window,{force=true})
+	ui.toggle_term_window()
 end
 
 local get_new_output_buffer = function()
@@ -43,9 +17,13 @@ local get_new_output_buffer = function()
 	local output_buffer_old  = M.output_buffer
 
 	M.output_buffer = vim.api.nvim_create_buf(false,true)
-	if term_window_visible() then -- Replace old buffer before deleting
-		vim.api.nvim_win_set_buf(M.term_window,M.output_buffer)
-	end
+	vim.notify("Building new output buffer")
+
+	ui.replaceBuffer(M.output_buffer)
+	-- if term_window_visible() then -- Replace old buffer before deleting
+	-- 	vim.notify("Terminal Window is visible!")
+	-- 	vim.api.nvim_win_set_buf(ui.outputWindow,M.output_buffer)
+	-- end
 
 	if output_buffer_old then
 		-- kill old buffer
@@ -86,7 +64,7 @@ M.run_task = function(task,once)
 		trigger_on_save(output_buffer, function() M.run_task_term(task) end)
 		return
 	end
-	open_term_window(output_buffer)
+	ui.open_term_window(output_buffer)
 
 	vim.api.nvim_buf_call(output_buffer,function() M.run_task_term(task) end)
 end
@@ -102,11 +80,11 @@ M.run_task_term = function(task)
 	local handle = vim.fn.termopen(command,{
 		cwd = workdir,
 		on_stdout = function(job_id, data)
-			vim.api.nvim_buf_call(M.output_buffer, function()vim.cmd.normal("G") end)
+			vim.api.nvim_buf_call(M.output_buffer, function() vim.cmd.normal("G") end)
 		end,
 		on_stderr = function(job_id, data)
 			-- Print stderr to the terminal buffer in red
-			vim.api.nvim_buf_call(M.output_buffer, function()vim.cmd.normal("G") end)
+			vim.api.nvim_buf_call(M.output_buffer, function() vim.cmd.normal("G") end)
 		end
 })
 

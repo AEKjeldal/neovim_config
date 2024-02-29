@@ -1,6 +1,7 @@
 
 local dap       = require('dap')
 local constants = require('workspace_importer.constants')
+local utils = require('workspace_importer.utilities')
 
 local M = {}
 
@@ -11,10 +12,7 @@ M.continue = function()
 		dap.continue()
 	end
 
-	-- print('Configuration')
-	local configurations = constants.configurations
-
-
+	local configurations = utils.copy(constants.configurations)
 	-- TODO fix to be filetype dependend!
 	for _,ft in pairs(dap.configurations) do
 		for _,conf in pairs(ft) do

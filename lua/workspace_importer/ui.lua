@@ -1,21 +1,49 @@
+local constants        = require('workspace_importer.constants')
+
+
 local M = {}
-M.outputWindow = {}
+M.outputWindow = nil
+M.defaultBuffer = nil
+
+local term_window_visible=function()
+	if not (type(M.outputWindow) == 'number') then
+		return false
+	end
+	return vim.api.nvim_win_is_valid(M.outputWindow)
+end
 
 
-local open_term_window = function(output_buffer,height)
+M.replaceBuffer =function(new_buffer)
+	M.defaultBuffer = new_buffer
+	if term_window_visible() then
+		vim.notify("Buffer replaced")
+		vim.api.nvim_win_set_buf(M.outputWindow,new_buffer)
+	end
+end
+
+M.toggle_term_window = function()
+	if not term_window_visible() then
+		M.open_term_window(M.defaultBuffer)
+		return
+	end
+	vim.api.nvim_win_close(M.outputWindow,{force=true})
+end
+
+M.open_term_window = function(output_buffer,height)
 
 	if not term_window_visible() then
 		local curr_win = vim.api.nvim_get_current_win()
+
 		height = height or 10 -- set a default
 		vim.cmd("bel "..height.."split")
-		M.term_window = vim.api.nvim_get_current_win() -- we are now in termwindow
+		M.outputWindow = vim.api.nvim_get_current_win() -- we are now in termwindow
+
 		vim.api.nvim_set_current_win(curr_win)
 	end
 
 	-- TODO consider only running if output buffer is given=
-	vim.api.nvim_win_set_buf(M.term_window,output_buffer)
+	vim.api.nvim_win_set_buf(M.outputWindow,output_buffer)
 end
-
 
 
 -- Usable for floating windows
@@ -42,9 +70,6 @@ local function get_winopts(type)
 		}
 	end
 end
-
-
-
 
 
 

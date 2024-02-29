@@ -2,6 +2,14 @@ local json5 = require('json5')
 
 local M = {}
 
+M.copy = function(original)
+	local copy = {}
+	for key,value in pairs(original) do
+		copy[key] = value
+	end
+	return  copy
+end
+
 M.str_split = function (inputstr,seperator)
 	-- either use given seperator (regex) or whitespace
 	seperator = seperator or "%s"
