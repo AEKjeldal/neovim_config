@@ -6,6 +6,7 @@ local ui               = require('workspace_importer.ui')
 M = {}
 M.output_buffer   = nil
 M.trigger_on_save = nil
+M.named_buffers = {}
 
 
 M.toggle_term_window = function()
@@ -53,7 +54,6 @@ local function trigger_on_save(output_buffer,callback)
 	})
 end
 
-
 M.run_task = function(task,once)
 	local output_buffer = get_new_output_buffer()
 	local trigger = task.trigger or 'called'
@@ -91,8 +91,14 @@ M.run_task_term = function(task)
 end
 
 M.run_tests = function(once)
-	local python_tests = builtin_runners.python.test
-	M.run_task(python_tests[1],once)
+	local filetype = vim.bo.filetype
+	local tasks = builtin_runners[filetype]
+
+	if tasks and tasks.test then
+		M.run_task(task.test[1],once)
+	else
+		print('no tests found for filetype: '..filetype)
+	end
 end
 
 M.toggle_autotest = function()

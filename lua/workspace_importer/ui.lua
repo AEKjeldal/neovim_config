@@ -13,7 +13,7 @@ local term_window_visible=function()
 end
 
 
-M.replaceBuffer =function(new_buffer)
+M.replaceBuffer = function(new_buffer)
 	M.defaultBuffer = new_buffer
 	if term_window_visible() then
 		vim.notify("Buffer replaced")
